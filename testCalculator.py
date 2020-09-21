@@ -261,7 +261,7 @@ else: # Frequentist
     """
 
     # Z-test visualisation
-    fig, ax = plt.subplots(figsize=(10, 4), dpi=150)
+    fig, ax = plt.subplots(figsize=(10, 5), dpi=150)
     xA = np.linspace(0-4*se_difference, 0+4*se_difference, 1000)
     yA = scs.norm(0, se_difference).pdf(xA)
     ax.plot(xA, yA, c='#181716')
@@ -323,7 +323,7 @@ else: # Frequentist
 
     ax.text(
         ax.get_xlim()[0],
-        ax.get_ylim()[1]*1.15,
+        ax.get_ylim()[1]*1.18,
         "Displays the expected distribution of the difference between the means under the null hypothesis.",
         **roboto
     )
@@ -365,7 +365,7 @@ else: # Frequentist
     """
 
     # Power plot
-    fig, ax = plt.subplots(figsize=(10, 4), dpi=150)
+    fig, ax = plt.subplots(figsize=(10, 5), dpi=150)
     
     
     xA = np.linspace(control_cr-4*control_se, control_cr+4*control_se, 1000)
@@ -481,7 +481,7 @@ else: # Frequentist
 
     ax.text(
         ax.get_xlim()[0],
-        ax.get_ylim()[1]*1.15,
+        ax.get_ylim()[1]*1.17,
         "Illustrates the likelihood of avoiding a false negative/type II error",
         **roboto
     )

@@ -143,7 +143,7 @@ def round_decimals_down(number: float, decimals: int = 2):
 # Plot with colour split for less/greater than 0
 def plot_simulation_of_difference(samples_A, samples_B):
 
-    fig, ax = plt.subplots(figsize=(10, 4), dpi=150)
+    fig, ax = plt.subplots(figsize=(10, 5), dpi=150)
 
     difference = samples_B/samples_A-1
 
@@ -189,7 +189,7 @@ def plot_simulation_of_difference(samples_A, samples_B):
 
     ax.text(
         ax.get_xlim()[0],
-        ax.get_ylim()[1]*1.1,
+        ax.get_ylim()[1]*1.12,
         'Highlights the relative difference of the posterior distributions',
         **roboto
     )
