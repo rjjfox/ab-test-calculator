@@ -59,7 +59,6 @@ tails = st.sidebar.selectbox(
     index=1
 )
 
-
 # Summary statistics
 control_cr = conversions_A/visitors_A
 variant_cr = conversions_B/visitors_B
@@ -99,33 +98,7 @@ if method == 'Bayesian':
         "<b>Likelihood of being better</b>": [f"{prob_A:.2%}", f"{prob_B:.2%}"]
     }
 
-    fig = go.Figure(data=[go.Table(
-        header=dict(
-            values=list(bayesian_data.keys()),
-            line_color='white', fill_color='white',
-            font=dict(size=12, color='black'),
-            align="left",
-        ),
-        cells=dict(
-            values=[bayesian_data.get(k) for k in bayesian_data.keys()],
-            align="left",
-            fill=dict(color=[['#F9F9F9', '#FFFFFF']*5]),
-        )
-    )
-    ])
-
-    fig.update_layout(
-        autosize=False,
-        height=150,
-        margin=dict(
-            l=20,
-            r=20,
-            b=10,
-            t=30,
-        )
-    )
-
-    st.write(fig)
+    create_plotly_table(bayesian_data)
 
     """
     The below graph plots the simulated difference between the two posterior
@@ -147,10 +120,10 @@ else: # Frequentist
             tail_direction = 'left'
     else:
         two_tails=True
-        tail_direction = False
+        tail_direction = 'two'
 
     z_score, p_value = z_test(visitors_A, conversions_A,
-                              visitors_B, conversions_B, one_tail=tail_direction)                      
+                              visitors_B, conversions_B, tails=tail_direction)                      
 
     power = get_power(visitors_A, conversions_A,
                       visitors_B, conversions_B,
@@ -214,35 +187,9 @@ else: # Frequentist
         "<b>P-value</b>": ["", f"{p_value:.4f}"]
     }
 
-    fig = go.Figure(data=[go.Table(
-        header=dict(
-            values=list(frequentist_data.keys()),
-            line_color='white', fill_color='white',
-            font=dict(size=12, color='black'),
-            align="left",
-        ),
-        cells=dict(
-            values=[frequentist_data.get(k) for k in frequentist_data.keys()],
-            align="left",
-            fill=dict(color=[['#F9F9F9', '#FFFFFF']*5]),
-        )
-    )
-    ])
+    create_plotly_table(frequentist_data)
 
-    fig.update_layout(
-        autosize=False,
-        height=150,
-        margin=dict(
-            l=20,
-            r=20,
-            b=10,
-            t=30,
-        )
-    )
-
-    st.write(fig)
-
-    z_value_for_alpha = get_z_value(alpha=alpha, two_tailed=two_tails)
+    z = get_z_value(alpha=alpha, two_tailed=two_tails)
 
     control_cr = conversions_A/visitors_A
     variant_cr = conversions_B/visitors_B
@@ -250,8 +197,6 @@ else: # Frequentist
     # standard errors
     control_se = (control_cr*(1-control_cr)/visitors_A)**0.5
     variant_se = (variant_cr*(1-variant_cr)/visitors_B)**0.5
-
-    # standard error of the difference
     se_difference = (control_se**2+variant_se**2)**0.5
 
     """
@@ -260,79 +205,10 @@ else: # Frequentist
     would expect under the null hypothesis. 
     """
 
-    # Z-test visualisation
-    fig, ax = plt.subplots(figsize=(10, 5), dpi=150)
-    xA = np.linspace(0-4*se_difference, 0+4*se_difference, 1000)
-    yA = scs.norm(0, se_difference).pdf(xA)
-    ax.plot(xA, yA, c='#181716')
-
-    diff = variant_cr - control_cr
-
-    ax.axvline(x=diff, ymax=ax.get_ylim()[1],
-                 c='tab:orange', alpha=0.5, linestyle='--')
-    ax.text(
-        ax.get_xlim()[0]+(ax.get_xlim()[1]-ax.get_xlim()[0])*0.8,
-        ax.get_ylim()[1]*0.8,
-        "Observed\ndifference: {:.2%}".format(
-            relative_difference),
-        color='tab:orange',
-        # rotation=270,
-        **roboto
+    plot_test_visualisation(
+        visitors_A, conversions_A, visitors_B, conversions_B,
+        alpha=alpha, tails=tail_direction
     )
-
-    if tail_direction == 'left':
-        ax.fill_between(
-            xA, 0, yA,
-            where=(
-                xA > 0 + se_difference*z_value_for_alpha
-            ),
-            color='green', alpha=0.2
-        )
-    elif tail_direction == 'right':
-        ax.fill_between(
-            xA, 0, yA,
-            where=(
-                xA < 0 - se_difference*z_value_for_alpha
-            ),
-            color='green', alpha=0.2
-        )
-    else:
-        ax.fill_between(
-            xA, 0, yA,
-            where=(
-                xA > 0 + se_difference*z_value_for_alpha
-            ) | (
-                xA < 0 - se_difference*z_value_for_alpha
-            ),
-            color='green', alpha=0.2
-        )
-
-    ax.get_xaxis().set_major_formatter(
-        mtick.FuncFormatter(lambda x, p: format(x/control_cr, '.0%')))
-
-    # ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
-    plt.xlabel('Relative difference of the means')
-    plt.ylabel('PDF')
-
-    ax.text(
-        ax.get_xlim()[0],
-        ax.get_ylim()[1]*1.25,
-        'Z-test visualisation',
-        **roboto_title
-    )
-
-    ax.text(
-        ax.get_xlim()[0],
-        ax.get_ylim()[1]*1.18,
-        "Displays the expected distribution of the difference between the means under the null hypothesis.",
-        **roboto
-    )
-
-    sns.despine(left=True)
-    ax.get_yaxis().set_visible(False)
-    fig.tight_layout()
-
-    st.write(fig)
 
     if p_value < alpha:
         f"""
@@ -346,7 +222,7 @@ else: # Frequentist
         the observed mean of the variant does not into this area that we are
         unable to reject the null hypothesis and get a significant result. A 
         difference of greater than 
-        {se_difference*z_value_for_alpha/control_cr:.2%} is needed.
+        {se_difference*z/control_cr:.2%} is needed.
         """
 
     """
@@ -364,138 +240,10 @@ else: # Frequentist
     1 - {power:.2%} = **{1-power:.2%}** which is our likelihood of a type II error.
     """
 
-    # Power plot
-    fig, ax = plt.subplots(figsize=(10, 5), dpi=150)
-    
-    
-    xA = np.linspace(control_cr-4*control_se, control_cr+4*control_se, 1000)
-    yA = scs.norm(control_cr, control_se).pdf(xA)
-    ax.plot(xA, yA, label='A')
-    # ax.axvline(x=control_cr, c='red', alpha=0.5, linestyle='--')
-    
-    if tail_direction == 'left':
-        ax.axvline(
-            x=control_cr+control_se*z_value_for_alpha,
-            c='tab:blue', alpha=0.5, linestyle='--'
-        )
-        ax.text(
-            control_cr+control_se*z_value_for_alpha,
-            max(yA)*0.4,
-            "Critical value",
-            color='tab:blue',
-            rotation=270,
-            **roboto_small
-        )
-    elif tail_direction == 'right':
-        ax.axvline(
-            x=control_cr-control_se*z_value_for_alpha,
-            c='tab:blue', alpha=0.5, linestyle='--'
-        )
-        ax.text(
-            control_cr-control_se*z_value_for_alpha,
-            max(yA)*0.4,
-            "Critical value",
-            color='tab:blue',
-            rotation=270,
-            **roboto_small
-        )
-    else:
-        ax.axvline(
-            x=control_cr-control_se*z_value_for_alpha,
-            c='tab:blue', alpha=0.5, linestyle='--'
-        )
-        ax.text(
-            control_cr-control_se*z_value_for_alpha,
-            max(yA)*0.4,
-            "Critical value",
-            color='tab:blue',
-            rotation=270,
-            **roboto_small
-        )
-
-        ax.axvline(
-            x=control_cr+control_se*z_value_for_alpha,
-            c='tab:blue', alpha=0.5, linestyle='--'
-        )
-        ax.text(
-            control_cr+control_se*z_value_for_alpha,
-            max(yA)*0.4,
-            "Critical value",
-            color='tab:blue',
-            rotation=270,
-            **roboto_small
-        )
-    
-    ax.text(
-        control_cr,
-        max(yA)*1.03,
-        "A",
-        color='tab:blue',
-        horizontalalignment='center',
-        **roboto_bold
-    )
-
-    xB = np.linspace(variant_cr-4*variant_se, variant_cr+4*variant_se, 1000)
-    yB = scs.norm(variant_cr, variant_se).pdf(xB)
-    ax.plot(xB, yB, label='B')
-
-    ax.text(
-        variant_cr,
-        max(yB)*1.03,
-        "B",
-        color='tab:orange',
-        horizontalalignment='center',
-        **roboto_bold
-    )
-
-    if relative_difference > 0:
-        ax.fill_between(
-            xB, 0, yB,
-            where=(xB > control_cr + control_se*z_value_for_alpha),
-            color='green', alpha=0.2
-        )
-    else:
-        ax.fill_between(
-            xB, 0, yB,
-            where=(xB < control_cr - control_se*z_value_for_alpha),
-            color='green', alpha=0.2
-        )
-
-    ax.text(
-        ax.get_xlim()[0]+(ax.get_xlim()[1]-ax.get_xlim()[0])*0.8,
-        ax.get_ylim()[1]*0.8,
-        f"Power: {power:.2%}",
-        horizontalalignment='left',
-        **roboto
-    )
-
-    ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
-    plt.xlabel('Converted Proportion')
-
-    ax.text(
-        ax.get_xlim()[0],
-        ax.get_ylim()[1]*1.25,
-        'Statistical power',
-        **roboto_title
-    )
-
-    ax.text(
-        ax.get_xlim()[0],
-        ax.get_ylim()[1]*1.17,
-        "Illustrates the likelihood of avoiding a false negative/type II error",
-        **roboto
-    )
-
-    sns.despine(left=True)
-    ax.get_yaxis().set_visible(False)
-    fig.tight_layout()
-
-    st.write(fig)
+    plot_power(visitors_A, conversions_A, visitors_B,
+               conversions_B, alpha=alpha, tails=tail_direction)
 
 
-# TODO: Add frequentist plots to frequentist_functions.py
 # TODO: Add references section for both approaches
-# FIXME: Enable the plots to handle different sig levels and one vs. two tail
-# TODO: Create plots as functions
 # TODO: Add explanations and formulas to pages
 

@@ -4,13 +4,13 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import math
+import plotly.graph_objects as go
 import streamlit as st
 
 roboto = {'fontname': 'Roboto', 'size': '12'}
-roboto_light = {'fontname': 'Roboto', 'size': '10', 'weight': 'light'}
 roboto_title = {'fontname': 'Roboto', 'size': '14', 'weight': 'bold'}
-roboto_table_header = {'fontname': 'Roboto', 'size': '9', 'weight': 'bold'}
-roboto_small = {'fontname': 'Roboto', 'size': '7.5', 'weight': 'light'}
+roboto_bold = {'fontname': 'Roboto', 'size': '12', 'weight': 'bold'}
+roboto_small = {'fontname': 'Roboto', 'size': '10'}
 
 font = {
     'family': 'sans-serif',
@@ -20,6 +20,35 @@ font = {
 
 plt.rc('font', **font)
 
+
+def create_plotly_table(data):
+    fig = go.Figure(data=[go.Table(
+        header=dict(
+            values=list(data.keys()),
+            line_color='white', fill_color='white',
+            font=dict(size=12, color='black'),
+            align="left",
+        ),
+        cells=dict(
+            values=[data.get(k) for k in data.keys()],
+            align="left",
+            fill=dict(color=[['#F9F9F9', '#FFFFFF']*5]),
+        )
+    )
+    ])
+
+    fig.update_layout(
+        autosize=False,
+        height=150,
+        margin=dict(
+            l=20,
+            r=20,
+            b=10,
+            t=30,
+        )
+    )
+
+    st.write(fig)
 
 
 @st.cache
