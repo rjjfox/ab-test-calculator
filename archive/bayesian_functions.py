@@ -1,4 +1,3 @@
-import numpy as np
 from scipy.stats import beta
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -52,7 +51,10 @@ def create_plotly_table(data):
 
 
 @st.cache
-def generate_posterior_samples(visitors_A, conversions_A, visitors_B, conversions_B):
+def generate_posterior_samples(
+        visitors_A, conversions_A, visitors_B, conversions_B
+        ):
+
     alpha_prior = 1
     beta_prior = 1
 
@@ -76,7 +78,9 @@ def generate_posterior_samples(visitors_A, conversions_A, visitors_B, conversion
 def plot_bayesian_probabilities(probabilities, labels=['A', 'B']):
     fig, ax = plt.subplots(figsize=(10, 4), dpi=150)
 
-    snsplot = ax.barh(labels[::-1], probabilities, color=['#77C063', '#DC362D'])
+    snsplot = ax.barh(
+        labels[::-1], probabilities, color=['#77C063', '#DC362D']
+        )
 
     ax.xaxis.grid(color='lightgrey')
     ax.set_axisbelow(True)
@@ -100,7 +104,8 @@ def plot_bayesian_probabilities(probabilities, labels=['A', 'B']):
     ax.text(
         ax.get_xlim()[0],
         ax.get_ylim()[1]*1.1,
-        'The bars show the likelihood of each variant being the better experience',
+        'The bars show the likelihood of each variant being the better'
+        ' experience',
         **roboto
     )
 
@@ -130,13 +135,12 @@ def plot_bayesian_probabilities(probabilities, labels=['A', 'B']):
         B_alignment = 'right'
         B_color = 'white'
 
-
     ax.text(
         A_xpos,
         snsplot.patches[0].get_y()+snsplot.patches[0].get_height()/2.1,
         f"{prob_A:.2%}",
-        horizontalalignment = A_alignment,
-        color = A_color,
+        horizontalalignment=A_alignment,
+        color=A_color,
         **roboto
     )
 
@@ -144,8 +148,8 @@ def plot_bayesian_probabilities(probabilities, labels=['A', 'B']):
         B_xpos,
         snsplot.patches[1].get_y()+snsplot.patches[1].get_height()/2.1,
         f"{prob_B:.2%}",
-        horizontalalignment = B_alignment,
-        color = B_color,
+        horizontalalignment=B_alignment,
+        color=B_color,
         **roboto
     )
 

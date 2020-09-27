@@ -16,3 +16,9 @@
 .lower {
     color: red
 }
+
+.error {
+    align: right;
+    width: 100px;
+    margin: auto
+}

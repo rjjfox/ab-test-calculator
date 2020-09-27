@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import scipy.stats as scs
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -30,7 +29,6 @@ def percentage_format(x):
     return f"{x:.0%}"
 
 
-
 def z_test(visitors_A, conversions_A, visitors_B, conversions_B, tails='two'):
     """ Run a Z-test with your data, returning the Z-score and p-value.
 
@@ -43,19 +41,20 @@ def z_test(visitors_A, conversions_A, visitors_B, conversions_B, tails='two'):
         Number of conversions
 
     tails : ['two', 'left', 'right'] (optional)
-        Specify what type of test; if 'two' (default), the p-value for a two-tail
-        Z-test will be returned.
-        'left' specifies a one-tail Z-test where the alternative hypothesis is that
-        the variant will return a better conversion rate, 'right' is the opposite.
+        Specify what type of test; if 'two' (default), the p-value for a
+        two-tail Z-test will be returned.
+        'left' specifies a one-tail Z-test where the alternative hypothesis is
+        that the variant will return a better conversion rate, 'right' is the
+        opposite.
 
     Returns
     -------
     z_score : float
-        Number of standard deviations between the mean of the control conversion
-        rate distribution and the variant conversion rate
+        Number of standard deviations between the mean of the control
+        conversion rate distribution and the variant conversion rate
     p_value : float
-        Probability of obtaining test results at least as extreme as the observed
-        results, under the conditions of the null hypothesis
+        Probability of obtaining test results at least as extreme as the
+        observed results, under the conditions of the null hypothesis
     """
 
     # conversion rates
@@ -80,7 +79,10 @@ def z_test(visitors_A, conversions_A, visitors_B, conversions_B, tails='two'):
     return z_score, p_value
 
 
-def get_power(visitors_A, conversions_A, visitors_B, conversions_B, alpha=0.05, two_tails=True):
+def get_power(
+    visitors_A, conversions_A, visitors_B, conversions_B,
+    alpha=0.05, two_tails=True
+        ):
     """Returns observed power from test results.
 
     Parameters
@@ -94,7 +96,7 @@ def get_power(visitors_A, conversions_A, visitors_B, conversions_B, alpha=0.05, 
     alpha : float
         Default = 0.05
         Type I error level
-    
+
     two_tails : boolean (optional)
         Default = True
         One or two-tail test
@@ -164,9 +166,9 @@ def plot_test_visualisation(
     alpha : float (optional)
         Default = 0.05
         Type I error level
-    
+
     tails : ['two', 'left', 'right'] (optional)
-        Specify what type of test; if 'two' (default), the p-value for a 
+        Specify what type of test; if 'two' (default), the p-value for a
         two-tail Z-test will be returned.
         'left' specifies a one-tail Z-test where the alternative hypothesis
         is that the variant will return a better conversion rate, 'right' is
@@ -254,7 +256,8 @@ def plot_test_visualisation(
     ax.text(
         ax.get_xlim()[0],
         ax.get_ylim()[1]*1.18,
-        "Displays the expected distribution of the difference between the means under the null hypothesis.",
+        "Displays the expected distribution of the difference between the"
+        " means under the null hypothesis.",
         **roboto
     )
 
@@ -283,9 +286,9 @@ def plot_power(
     alpha : float (optional)
         Default = 0.05
         Type I error level
-    
+
     tails : ['two', 'left', 'right'] (optional)
-        Specify what type of test; if 'two' (default), the p-value for a 
+        Specify what type of test; if 'two' (default), the p-value for a
         two-tail Z-test will be returned.
         'left' specifies a one-tail Z-test where the alternative hypothesis
         is that the variant will return a better conversion rate, 'right' is
@@ -295,7 +298,7 @@ def plot_power(
     -------
     Streamlit figure plot
     """
-    
+
     control_cr = conversions_A/visitors_A
     variant_cr = conversions_B/visitors_B
 
@@ -427,7 +430,8 @@ def plot_power(
     ax.text(
         ax.get_xlim()[0],
         ax.get_ylim()[1]*1.17,
-        "Illustrates the likelihood of avoiding a false negative/type II error",
+        "Illustrates the likelihood of avoiding a false negative/type II"
+        " error",
         **roboto
     )
 
