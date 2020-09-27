@@ -9,3 +9,7 @@ An AB test calculator with options to use either Bayesian or Frequentist statist
 <p align="center">
   <img src="./img/screenshot.jpg" alt="Size Limit CLI" width="738">
 </p>
+
+![GIF demo](img/demo.gif)
+
+![GIF demo](img/demo.mp4)
