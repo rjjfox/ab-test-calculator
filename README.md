@@ -6,6 +6,11 @@ An AB test calculator with options to use either Bayesian or Frequentist statist
 * Built with Streamlit
 * Hosted on Heroku
 
+## Usage
+
+Input values into the sidebar, populating the test data and choosing a statistial approach. The app will automatically update the graphs and outputs.
+
+
 <p align="center">
-  <img src="./img/screenshot.jpg" alt="Size Limit CLI" width="738">
+  <img src="./img/screenshot.jpg" width="738">
 </p>
