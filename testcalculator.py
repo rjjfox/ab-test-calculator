@@ -106,8 +106,11 @@ if method == 'Bayesian':
 
         """
         ---
+        ### See also
 
-        ### Recommended Reading 
+        [Sample size calculator](http://samplesize.rfoxdata.co.uk/)
+
+        ### Recommended Reading
 
         * [Bayesian Methods for Hackers by Cameron Davidson-Pilon]\
             (https://github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers)
@@ -118,7 +121,7 @@ if method == 'Bayesian':
         """
 
     except ValueError:
-        
+
         t = """
         <img class='error'
             src='https://www.flaticon.com/svg/static/icons/svg/595/595067.svg'>
@@ -127,12 +130,12 @@ if method == 'Bayesian':
 
         """
         An error occured, please check the test data input and try again.
-        
+
         For Bayesian calculations, the conversion rate must be between 0 and
         1.
         """
 
-    
+
 else:  # Frequentist
 
     f = Frequentist(
@@ -252,6 +255,10 @@ else:  # Frequentist
 
     """
     ---
+
+    ### See also
+
+    [Sample size calculator](http://samplesize.rfoxdata.co.uk/)
 
     ### Recommended reading
 
