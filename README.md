@@ -11,5 +11,5 @@ An AB test calculator with options to use either Bayesian or Frequentist statist
 Input values into the sidebar, populating the test data and choosing a statistial approach. The app will automatically update the graphs and outputs.
 
 <p align="center">
-  <img src="./img/screenshot.jpg" width="738">
+  <img src="./img/testcalculator.gif" width="738">
 </p>
