@@ -4,7 +4,7 @@ from functions import create_plotly_table, local_css, percentage_format,\
     Bayesian, Frequentist
 
 st.set_page_config(
-    page_title="Test Sample Size Calculator",
+    page_title="AB Test Calculator",
     page_icon='https://rfoxdata.co.uk/assets/favicon/favicon-32x32.png',
 )
 
