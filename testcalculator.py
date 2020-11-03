@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 from functions import create_plotly_table, local_css, percentage_format,\
     Bayesian, Frequentist
 
+st.set_page_config(
+    page_title="Test Sample Size Calculator",
+    page_icon='https://rfoxdata.co.uk/assets/favicon/favicon-32x32.png',
+)
+
 roboto = {'fontname': 'Roboto', 'size': '12'}
 roboto_title = {'fontname': 'Roboto', 'size': '14', 'weight': 'bold'}
 roboto_bold = {'fontname': 'Roboto', 'size': '12', 'weight': 'bold'}
