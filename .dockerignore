@@ -1,0 +1,17 @@
+.git
+
+# README and which-test file
+*.md
+
+# Virtual environment details
+venv
+
+# Code editors and IDE stuff
+.idea
+.vscode
+__pycache__/
+.ipynb_checkpoints
+
+# Old files and images for the Github repo
+archive
+img
