@@ -263,7 +263,7 @@ else:  # Frequentist
 
     ### See also
 
-    [Sample size calculator](http://samplesize.rfoxdata.co.uk/)
+    [Sample size calculator](https://abtestsamplesize.herokuapp.com/)
 
     ### Recommended reading
 

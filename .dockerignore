@@ -9,8 +9,10 @@ venv
 # Code editors and IDE stuff
 .idea
 .vscode
-__pycache__/
+__pycache__
 .ipynb_checkpoints
+Procfile
+setup.sh
 
 # Old files and images for the Github repo
 archive
