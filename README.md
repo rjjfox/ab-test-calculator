@@ -2,9 +2,17 @@
 
 An AB test calculator with options to use either Bayesian or Frequentist statistics, built with Streamlit.
 
-* Powered by Python
-* Built with Streamlit
-* Hosted on Heroku
+- Powered by Python
+- Built with Streamlit
+- Hosted on Heroku
+
+## Running locally
+
+Clone the respository and run the following within the command line to run the Streamlit app on your localhost.
+
+```
+streamlit run app.py
+```
 
 ## Usage
 
