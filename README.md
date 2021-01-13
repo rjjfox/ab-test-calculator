@@ -33,6 +33,14 @@ With these installed, you simply need to run
 streamlit run app.py
 ```
 
+### Docker
+
+Alternatively, with Docker, use the following command and then navigate to localhost.
+
+```
+docker run -p 80:8080 ryanfox212/ab-test-calculator
+```
+
 ## Deployment
 
 I utilised Heroku's free tier to host the web app. To do the same, create a project on Heroku's website and then I recommend linking the project to a Github repository in the Deploy section.
