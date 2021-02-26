@@ -1,27 +1,24 @@
 import streamlit as st
 import matplotlib.pyplot as plt
-from functions import create_plotly_table, local_css, percentage_format,\
-    Bayesian, Frequentist
+from functions import create_plotly_table, local_css, percentage_format
+from bayesian import Bayesian
+from frequentist import Frequentist
 
 st.set_page_config(
     page_title="AB Test Calculator",
-    page_icon='https://rfoxdata.co.uk/assets/favicon/favicon-32x32.png',
+    page_icon="https://rfoxdata.co.uk/assets/favicon/favicon-32x32.png",
 )
 
-roboto = {'fontname': 'Roboto', 'size': '12'}
-roboto_title = {'fontname': 'Roboto', 'size': '14', 'weight': 'bold'}
-roboto_bold = {'fontname': 'Roboto', 'size': '12', 'weight': 'bold'}
-roboto_small = {'fontname': 'Roboto', 'size': '10'}
+roboto = {"fontname": "Roboto", "size": "12"}
+roboto_title = {"fontname": "Roboto", "size": "14", "weight": "bold"}
+roboto_bold = {"fontname": "Roboto", "size": "12", "weight": "bold"}
+roboto_small = {"fontname": "Roboto", "size": "10"}
 
 local_css("style.css")
 
-font = {
-    'family': 'sans-serif',
-    'sans-serif': 'roboto',
-    'size': 11
-}
+font = {"family": "sans-serif", "sans-serif": "roboto", "size": 11}
 
-plt.rc('font', **font)
+plt.rc("font", **font)
 
 """
 # AB test calculator
@@ -33,40 +30,40 @@ Frequentist testing approach. Below is Bayesian by default._
 """
 
 # Sidebar
-st.sidebar.markdown("""
+st.sidebar.markdown(
+    """
 ## Approach
-""")
+"""
+)
 
-method = st.sidebar.radio('Bayesian vs. Frequentist',
-                          ['Bayesian', 'Frequentist'])
+method = st.sidebar.radio("Bayesian vs. Frequentist", ["Bayesian", "Frequentist"])
 
 
-st.sidebar.markdown("""
+st.sidebar.markdown(
+    """
 ## Test data
-""")
+"""
+)
 
 visitors_A = st.sidebar.number_input("Visitors A", value=50000, step=100)
 conversions_A = st.sidebar.number_input("Conversions A", value=1500, step=10)
 visitors_B = st.sidebar.number_input("Visitors B", value=50000, step=100)
 conversions_B = st.sidebar.number_input("Conversions B", value=1560, step=10)
 
-st.sidebar.markdown("""
+st.sidebar.markdown(
+    """
 ## Frequentist settings
-""")
+"""
+)
 
 alpha_input = 1 - st.sidebar.selectbox(
-    'Significance level',
-    [0.90, 0.95, 0.99],
-    index=1,
-    format_func=percentage_format
+    "Significance level", [0.90, 0.95, 0.99], index=1, format_func=percentage_format
 )
 tails_input = st.sidebar.selectbox(
-    'One vs. two tail',
-    ['One-tail', 'Two-tail'],
-    index=1
+    "One vs. two tail", ["One-tail", "Two-tail"], index=1
 )
 
-if tails_input == 'One-tail':
+if tails_input == "One-tail":
     two_tails_bool = False
 else:
     two_tails_bool = True
@@ -74,7 +71,7 @@ else:
 b = Bayesian(visitors_A, conversions_A, visitors_B, conversions_B)
 
 # Bayesian Method
-if method == 'Bayesian':
+if method == "Bayesian":
 
     try:
         b.generate_posterior_samples()
@@ -84,16 +81,12 @@ if method == 'Bayesian':
         st.text("")
 
         bayesian_data = {
-            "<b>Variant</b>": ['A', 'B'],
+            "<b>Variant</b>": ["A", "B"],
             "<b>Visitors</b>": [f"{b.visitors_A:,}", f"{b.visitors_B:,}"],
             "<b>Conversions</b>": [b.conversions_A, b.conversions_B],
-            "<b>Conversion rate</b>": [
-                f"{b.control_cr:.2%}", f"{b.variant_cr:.2%}"
-                ],
-            "<b>Uplift</b>": ['', f"{b.relative_difference:.2%}"],
-            "<b>Likelihood of being better</b>": [
-                f"{b.prob_A:.2%}", f"{b.prob_B:.2%}"
-                ]
+            "<b>Conversion rate</b>": [f"{b.control_cr:.2%}", f"{b.variant_cr:.2%}"],
+            "<b>Uplift</b>": ["", f"{b.relative_difference:.2%}"],
+            "<b>Likelihood of being better</b>": [f"{b.prob_A:.2%}", f"{b.prob_B:.2%}"],
         }
 
         create_plotly_table(bayesian_data)
@@ -144,8 +137,12 @@ if method == 'Bayesian':
 else:  # Frequentist
 
     f = Frequentist(
-        visitors_A, conversions_A, visitors_B, conversions_B,
-        alpha=alpha_input, two_tails=two_tails_bool
+        visitors_A,
+        conversions_A,
+        visitors_B,
+        conversions_B,
+        alpha=alpha_input,
+        two_tails=two_tails_bool,
     )
 
     z_score, p_value = f.z_test()
@@ -161,16 +158,20 @@ else:  # Frequentist
         st.markdown(t, unsafe_allow_html=True)
 
         if f.relative_difference < 0:
-            t = """
-            <p>B's conversion rate is <span class='lower'>"""\
-                + '{:.2%}'.format(abs(f.relative_difference)) + \
-                """ lower</span> than A's CR."""
+            t = (
+                """
+            <p>B's conversion rate is <span class='lower'>"""
+                + "{:.2%}".format(abs(f.relative_difference))
+                + """ lower</span> than A's CR."""
+            )
             st.markdown(t, unsafe_allow_html=True)
         else:
-            t = """
-            <p>B's conversion rate is <span class='higher'>"""\
-                + '{:.2%}'.format(abs(f.relative_difference)) + \
-                """ higher</span> than A's CR."""
+            t = (
+                """
+            <p>B's conversion rate is <span class='higher'>"""
+                + "{:.2%}".format(abs(f.relative_difference))
+                + """ higher</span> than A's CR."""
+            )
             st.markdown(t, unsafe_allow_html=True)
 
         f"""
@@ -200,16 +201,14 @@ else:  # Frequentist
         """
 
     frequentist_data = {
-        "<b>Variant</b>": ['A', 'B'],
+        "<b>Variant</b>": ["A", "B"],
         "<b>Visitors</b>": [f"{f.visitors_A:,}", f"{f.visitors_B:,}"],
         "<b>Conversions</b>": [f.conversions_A, f.conversions_B],
-        "<b>Conversion rate</b>": [
-            f"{f.control_cr:.2%}", f"{f.variant_cr:.2%}"
-            ],
-        "<b>Uplift</b>": ['', f"{f.relative_difference:.2%}"],
+        "<b>Conversion rate</b>": [f"{f.control_cr:.2%}", f"{f.variant_cr:.2%}"],
+        "<b>Uplift</b>": ["", f"{f.relative_difference:.2%}"],
         "<b>Power</b>": ["", f"{power:.4f}"],
         "<b>Z-score</b>": ["", f"{z_score:.4f}"],
-        "<b>P-value</b>": ["", f"{p_value:.4f}"]
+        "<b>P-value</b>": ["", f"{p_value:.4f}"],
     }
 
     create_plotly_table(frequentist_data)
