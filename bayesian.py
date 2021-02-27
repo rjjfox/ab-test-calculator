@@ -32,8 +32,9 @@ class Bayesian(object):
     Methods
     -------
     generate_posterior_samples
-        Creates samples for the posterior distributions for A and B and
-        their mean probabilities
+        Creates samples for the posterior distributions for A and B
+    calculate_probabilities
+        Calculate the likelihood that the variants are better
     plot_bayesian_probabilities
         Plots a horizontal bar chart of the likelihood of either variant being
         the winner
@@ -54,6 +55,8 @@ class Bayesian(object):
         self.relative_difference = self.variant_cr / self.control_cr - 1
 
     def generate_posterior_samples(self):
+        """Creates samples for the posterior distributions for A and B"""
+
         alpha_prior = 1
         beta_prior = 1
 
@@ -71,39 +74,26 @@ class Bayesian(object):
         self.samples_posterior_A = posterior_A.rvs(samples)
         self.samples_posterior_B = posterior_B.rvs(samples)
 
+    def calculate_probabilities(self):
+        """Calculate the likelihood that the variants are better"""
+
         self.prob_A = (self.samples_posterior_A > self.samples_posterior_B).mean()
         self.prob_B = (self.samples_posterior_A <= self.samples_posterior_B).mean()
 
     def plot_bayesian_probabilities(self, labels=["A", "B"]):
+        """
+        Plots a horizontal bar chart of the likelihood of either variant being
+        the winner
+        """
+
         fig, ax = plt.subplots(figsize=(10, 4), dpi=150)
 
         snsplot = ax.barh(
             labels[::-1], [self.prob_B, self.prob_A], color=["#77C063", "#DC362D"]
         )
 
-        ax.xaxis.grid(color="lightgrey")
-        ax.set_axisbelow(True)
-
-        ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
-        sns.despine(left=True, bottom=True)
-        ax.tick_params(axis="both", which="both", bottom=False, left=False)
-
-        ax.text(
-            ax.get_xlim()[0],
-            ax.get_ylim()[1] * 1.2,
-            "Bayesian test result",
-            **roboto_title,
-        )
-
-        ax.text(
-            ax.get_xlim()[0],
-            ax.get_ylim()[1] * 1.1,
-            "The bars show the likelihood of each variant being the better"
-            " experience",
-            **roboto,
-        )
-
-        # Value annotations conditional on size of bars
+        # Display the probabilities by the bars
+        # Parameters for ax.text based on relative bar sizes
         if self.prob_A < 0.2:
             A_xpos = self.prob_A + 0.01
             A_alignment = "left"
@@ -126,6 +116,7 @@ class Bayesian(object):
             B_alignment = "right"
             B_color = "white"
 
+        # Plot labels using previous parameters
         ax.text(
             A_xpos,
             snsplot.patches[1].get_y() + snsplot.patches[1].get_height() / 2.1,
@@ -134,7 +125,6 @@ class Bayesian(object):
             color=A_color,
             **roboto,
         )
-
         ax.text(
             B_xpos,
             snsplot.patches[0].get_y() + snsplot.patches[0].get_height() / 2.1,
@@ -144,11 +134,38 @@ class Bayesian(object):
             **roboto,
         )
 
+        # Title
+        ax.text(
+            ax.get_xlim()[0],
+            ax.get_ylim()[1] * 1.2,
+            "Bayesian test result",
+            **roboto_title,
+        )
+
+        # Subtitle
+        ax.text(
+            ax.get_xlim()[0],
+            ax.get_ylim()[1] * 1.1,
+            "The bars show the likelihood of each variant being the better"
+            " experience",
+            **roboto,
+        )
+
+        ax.xaxis.grid(color="lightgrey")
+        ax.set_axisbelow(True)
+        ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
+        sns.despine(left=True, bottom=True)
+        ax.tick_params(axis="both", which="both", bottom=False, left=False)
         fig.tight_layout()
 
         st.write(fig)
 
     def plot_simulation_of_difference(self):
+        """
+        Plots a histogram showing the distribution of the differences between
+        A and B highlighting how much of the difference shows a positve diff
+        vs a negative one.
+        """
 
         fig, ax = plt.subplots(figsize=(10, 5), dpi=150)
 
@@ -169,20 +186,13 @@ class Bayesian(object):
         ax.yaxis.grid(color="lightgrey")
         ax.set_axisbelow(True)
         ax.set_ylabel("")
-
         ax.set_xlabel("Relative conversion rate increase")
 
         ax.get_yaxis().set_major_formatter(
             mtick.FuncFormatter(lambda x, p: format(x / len(difference), ".0%"))
         )
 
-        sns.despine(left=True)
-
-        ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
-
-        ax.tick_params(axis="both", which="both", length=0)
-        ax.tick_params(axis="y", colors="lightgrey")
-
+        # Title
         ax.text(
             ax.get_xlim()[0],
             ax.get_ylim()[1] * 1.2,
@@ -190,6 +200,7 @@ class Bayesian(object):
             **roboto_title,
         )
 
+        # Subtitle
         ax.text(
             ax.get_xlim()[0],
             ax.get_ylim()[1] * 1.12,
@@ -197,6 +208,10 @@ class Bayesian(object):
             **roboto,
         )
 
+        ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
+        ax.tick_params(axis="both", which="both", length=0)
+        ax.tick_params(axis="y", colors="lightgrey")
+        sns.despine(left=True)
         fig.tight_layout()
 
         st.write(fig)

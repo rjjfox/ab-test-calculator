@@ -232,6 +232,7 @@ class Frequentist(object):
 
         fig, ax = plt.subplots(figsize=(10, 5), dpi=150)
 
+        # Plot the distribution of A
         xA = np.linspace(
             self.control_cr - 4 * self.control_se,
             self.control_cr + 4 * self.control_se,
@@ -240,6 +241,16 @@ class Frequentist(object):
         yA = scs.norm(self.control_cr, self.control_se).pdf(xA)
         ax.plot(xA, yA, label="A")
 
+        # Plot the distribution of B
+        xB = np.linspace(
+            self.variant_cr - 4 * self.variant_se,
+            self.variant_cr + 4 * self.variant_se,
+            1000,
+        )
+        yB = scs.norm(self.variant_cr, self.variant_se).pdf(xB)
+        ax.plot(xB, yB, label="B")
+
+        # Label A at its apex
         ax.text(
             self.control_cr,
             max(yA) * 1.03,
@@ -249,7 +260,17 @@ class Frequentist(object):
             **roboto_bold,
         )
 
-        # Add critical value lines
+        # Label B at its apex
+        ax.text(
+            self.variant_cr,
+            max(yB) * 1.03,
+            "B",
+            color="tab:orange",
+            horizontalalignment="center",
+            **roboto_bold,
+        )
+
+        # Add critical value lines depending on two vs. one tail and left vs. right
         if self.tail_direction == "left":
             ax.axvline(
                 x=self.control_cr + self.control_se * self.z,
@@ -311,23 +332,6 @@ class Frequentist(object):
                 **roboto_small,
             )
 
-        xB = np.linspace(
-            self.variant_cr - 4 * self.variant_se,
-            self.variant_cr + 4 * self.variant_se,
-            1000,
-        )
-        yB = scs.norm(self.variant_cr, self.variant_se).pdf(xB)
-        ax.plot(xB, yB, label="B")
-
-        ax.text(
-            self.variant_cr,
-            max(yB) * 1.03,
-            "B",
-            color="tab:orange",
-            horizontalalignment="center",
-            **roboto_bold,
-        )
-
         # Fill in the power and annotate
         if self.variant_cr > self.control_cr:
             ax.fill_between(
@@ -348,6 +352,7 @@ class Frequentist(object):
                 alpha=0.2,
             )
 
+        # Display power value on graph
         ax.text(
             ax.get_xlim()[0] + (ax.get_xlim()[1] - ax.get_xlim()[0]) * 0.8,
             ax.get_ylim()[1] * 0.8,
@@ -356,6 +361,7 @@ class Frequentist(object):
             **roboto,
         )
 
+        # Title
         ax.text(
             ax.get_xlim()[0],
             ax.get_ylim()[1] * 1.25,
@@ -363,6 +369,7 @@ class Frequentist(object):
             **roboto_title,
         )
 
+        # Subtitle
         ax.text(
             ax.get_xlim()[0],
             ax.get_ylim()[1] * 1.17,
