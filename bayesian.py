@@ -183,11 +183,6 @@ class Bayesian(object):
                 lower, binwidth=0.01, binrange=(lower_limit, 0), color="#DC362D"
             )
 
-        ax.yaxis.grid(color="lightgrey")
-        ax.set_axisbelow(True)
-        ax.set_ylabel("")
-        ax.set_xlabel("Relative conversion rate increase")
-
         ax.get_yaxis().set_major_formatter(
             mtick.FuncFormatter(lambda x, p: format(x / len(difference), ".0%"))
         )
@@ -208,10 +203,17 @@ class Bayesian(object):
             **roboto,
         )
 
-        ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
-        ax.tick_params(axis="both", which="both", length=0)
-        ax.tick_params(axis="y", colors="lightgrey")
+        # Set grid lines as grey and display behind the plot
+        ax.yaxis.grid(color="lightgrey")
+        ax.set_axisbelow(True)
+
+        # Remove y axis line and label and dim the tick labels
         sns.despine(left=True)
+        ax.set_ylabel("")
+        ax.tick_params(axis="y", colors="lightgrey")
+
+        ax.set_xlabel("Relative conversion rate increase")
+        ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
         fig.tight_layout()
 
         st.write(fig)
