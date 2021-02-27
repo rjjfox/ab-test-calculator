@@ -75,7 +75,7 @@ if method == "Bayesian":
 
     try:
         b.generate_posterior_samples()
-
+        b.calculate_probabilities()
         b.plot_bayesian_probabilities()
 
         st.text("")
@@ -104,9 +104,6 @@ if method == "Bayesian":
 
         """
         ---
-        ### See also
-
-        [Sample size calculator](https://abtestsamplesize.herokuapp.com/)
 
         ### Recommended Reading
 
@@ -260,10 +257,6 @@ else:  # Frequentist
     """
     ---
 
-    ### See also
-
-    [Sample size calculator](https://abtestsamplesize.herokuapp.com/)
-
     ### Recommended reading
 
     * [Z-test Wikipedia](https://en.wikipedia.org/wiki/Z-test)
@@ -272,4 +265,11 @@ else:  # Frequentist
     * [AB test calculator by AB Testguide](https://www.abtestguide.com/calc/)
     """
 
-    # TODO: Add a sample ratio mismatch score in case of unequal samples
+"""
+
+### See also
+
+* [Sample size calculator](https://abtestsamplesize.herokuapp.com/)
+* [Github Repository](https://github.com/rjjfox/ab-test-calculator)
+
+"""
