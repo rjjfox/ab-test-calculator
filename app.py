@@ -56,8 +56,8 @@ st.sidebar.markdown(
 """
 )
 
-alpha_input = 1 - st.sidebar.selectbox(
-    "Significance level", [0.90, 0.95, 0.99], index=1, format_func=percentage_format
+alpha_input = 1 - st.sidebar.slider(
+    "Significance level", value=0.95, min_value=0.5, max_value=0.99
 )
 tails_input = st.sidebar.selectbox(
     "One vs. two tail", ["One-tail", "Two-tail"], index=1
