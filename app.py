@@ -173,7 +173,7 @@ else:  # Frequentist
 
         f"""
         You can be {1-alpha_input:.0%} confident that the result is true and
-        due to the changes made. There is a {alpha_input:.0%} that the result
+        due to the changes made. There is a {alpha_input:.0%} chance that the result
         is a false positive or type I error meaning the result is due to
         random chance.
         """
@@ -193,7 +193,7 @@ else:  # Frequentist
         """
 
         """
-        Either collect more data to to achieve greater precision in your test,
+        Either collect more data to achieve greater precision in your test,
         or conclude the test as inconclusive.
         """
 
@@ -229,7 +229,7 @@ else:  # Frequentist
     else:
         f"""
         The shaded areas cover {alpha_input:.0%} of the distribution. It is
-        because the observed mean of the variant does not into this area that
+        because the observed mean of the variant does not fall into this area that
         we are unable to reject the null hypothesis and get a significant
         result. A difference of greater than
         {f.se_difference*z/f.control_cr:.2%} is needed.
@@ -239,16 +239,16 @@ else:  # Frequentist
     #### Statistical Power
     """
 
-    """
+    f"""
     Power is a measure of how likely we are to detect a difference when there
     is one with 80% being the generally accepted threshold for statistical
-    validity.
+    validity. **The power for your test is {power:.2%}**
     """
 
     f"""
     An alternative way of defining power is that it is our likelihood of
     avoiding a Type II error or a false negative. Therefore the inverse of
-    power is 1 - {power:.2%} = **{1-power:.2%}** which is our likelihood of a
+    power is 1 - {power:.2%} = {1-power:.2%} which is our likelihood of a
     type II error.
     """
 
