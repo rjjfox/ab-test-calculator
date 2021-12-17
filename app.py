@@ -150,7 +150,7 @@ else:  # Frequentist
         t = """
         <h3 class='frequentist_title'>Significant</h3>
         <img class='frequentist_icon'
-            src='https://www.flaticon.com/svg/static/icons/svg/1533/1533913.svg'>
+            src='https://github.com/rjjfox/ab-test-calculator/blob/master/img/positive-vote.png'>
         """
         st.markdown(t, unsafe_allow_html=True)
 
@@ -182,7 +182,7 @@ else:  # Frequentist
         t = """
         <h3 class='frequentist_title'>Not significant</h3>
         <img class='frequentist_icon'
-            src='https://www.flaticon.com/svg/static/icons/svg/1533/1533919.svg'>
+            src='https://github.com/rjjfox/ab-test-calculator/blob/master/img/negative-vote.png'>
         """
         st.markdown(t, unsafe_allow_html=True)
 
