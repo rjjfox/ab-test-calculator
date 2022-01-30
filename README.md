@@ -6,6 +6,8 @@ An AB test significance calculator with options to use Bayesian or Frequentist s
   <img src="./img/testcalculator.gif" width="738">
 </p>
 
+See also my [AB test sample size calculator](https://github.com/rjjfox/ab-test-samplesize).
+
 ## Table of Contents
 
 - [Getting Started](#getting-started)
