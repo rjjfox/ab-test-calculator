@@ -1,5 +1,5 @@
 # Base image
-FROM python:3.8.5-slim
+FROM python:3.11-slim
 
 # Copy requirements.txt from local folder to docker container
 COPY requirements.txt ./requirements.txt
