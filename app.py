@@ -53,7 +53,7 @@ alpha_input = 1 - st.sidebar.slider(
     "Significance level", value=0.95, min_value=0.5, max_value=0.99
 )
 tails_input = st.sidebar.selectbox(
-    "One vs. two tail", ["One-tail", "Two-tail"], index=1
+    "One vs. two tail", ["One-tail", "Two-tail"], index=0 # defaults to One-tail
 )
 
 if tails_input == "One-tail":
