@@ -1,6 +1,6 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 from functions import create_plotly_table, local_css, percentage_format
+from fonts import apply_matplotlib_defaults
 from bayesian import Bayesian
 from frequentist import Frequentist
 
@@ -9,18 +9,9 @@ st.set_page_config(
     page_icon="https://rfoxdata.co.uk/assets/favicon/favicon-32x32.png",
 )
 
-# Use a font that ships with Matplotlib to avoid missing font warnings
-matplotlib_font = "DejaVu Sans"
-roboto = {"fontname": matplotlib_font, "size": "11"}
-roboto_light = {"fontname": matplotlib_font, "size": "10", "weight": "light"}
-roboto_title = {"fontname": matplotlib_font, "size": "12", "weight": "bold"}
-roboto_small = {"fontname": matplotlib_font, "size": "7.5", "weight": "light"}
-
-font = {"family": "sans-serif", "sans-serif": matplotlib_font, "size": 11}
-
 local_css("style.css")
 
-plt.rc("font", **font)
+apply_matplotlib_defaults()
 
 """
 # AB test calculator
@@ -107,14 +98,6 @@ if method == "Bayesian":
         """
         ---
 
-        ### Recommended Reading
-
-        * [Bayesian Methods for Hackers by Cameron Davidson-Pilon]\
-            (https://github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers)
-        * [Bayesian AB test calculator by AB Testguide]\
-            (https://abtestguide.com/bayesian/)
-        * [Beta distribution Wikipedia]\
-            (https://en.wikipedia.org/wiki/Beta_distribution)
         """
 
     except ValueError:
@@ -259,19 +242,28 @@ else:  # Frequentist
     """
     ---
 
-    ### Recommended reading
-
-    * [Z-test Wikipedia](https://en.wikipedia.org/wiki/Z-test)
-    * [The Math Behind AB Testing by Nguyen Ngo]\
-        (https://towardsdatascience.com/the-math-behind-a-b-testing-with-example-code-part-1-of-2-7be752e1d06f)
-    * [AB test calculator by AB Testguide](https://www.abtestguide.com/calc/)
     """
 
 """
 
-### See also
+#### See also
 
-* [Sample size calculator](https://abtestsamplesize.herokuapp.com/)
+* [Sample size calculator rjjfox](https://ab-test-samplesize.streamlit.app/)
 * [Github Repository](https://github.com/rjjfox/ab-test-calculator)
+
+#### Recommended reading
+
+**Bayesian**
+
+* [Bayesian Methods for Hackers by Cameron Davidson-Pilon](https://github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers)
+* [Bayesian AB test calculator by AB Testguide](https://abtestguide.com/bayesian/)
+* [Beta distribution Wikipedia](https://en.wikipedia.org/wiki/Beta_distribution)
+
+**Frequentist**
+
+* [Z-test Wikipedia](https://en.wikipedia.org/wiki/Z-test)
+* [The Math Behind AB Testing by Nguyen Ngo](https://towardsdatascience.com/the-math-behind-a-b-testing-with-example-code-part-1-of-2-7be752e1d06f)
+* [AB test calculator by AB Testguide](https://www.abtestguide.com/calc/)
+
 
 """

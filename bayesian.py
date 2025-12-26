@@ -4,11 +4,7 @@ import matplotlib.ticker as mtick
 import seaborn as sns
 import streamlit as st
 from functions import round_decimals_down
-
-roboto = {"fontname": "Roboto", "size": "12"}
-roboto_title = {"fontname": "Roboto", "size": "14", "weight": "bold"}
-roboto_bold = {"fontname": "Roboto", "size": "12", "weight": "bold"}
-roboto_small = {"fontname": "Roboto", "size": "10"}
+from fonts import FONT_DEFAULT, FONT_TITLE
 
 
 class Bayesian(object):
@@ -123,7 +119,7 @@ class Bayesian(object):
             f"{self.prob_A:.2%}",
             horizontalalignment=A_alignment,
             color=A_color,
-            **roboto,
+            **FONT_DEFAULT,
         )
         ax.text(
             B_xpos,
@@ -131,7 +127,7 @@ class Bayesian(object):
             f"{self.prob_B:.2%}",
             horizontalalignment=B_alignment,
             color=B_color,
-            **roboto,
+            **FONT_DEFAULT,
         )
 
         # Title
@@ -139,7 +135,7 @@ class Bayesian(object):
             ax.get_xlim()[0],
             ax.get_ylim()[1] * 1.2,
             "Bayesian test result",
-            **roboto_title,
+            **FONT_TITLE,
         )
 
         # Subtitle
@@ -148,7 +144,7 @@ class Bayesian(object):
             ax.get_ylim()[1] * 1.1,
             "The bars show the likelihood of each variant being the better"
             " experience",
-            **roboto,
+            **FONT_DEFAULT,
         )
 
         ax.xaxis.grid(color="lightgrey")
@@ -192,7 +188,7 @@ class Bayesian(object):
             ax.get_xlim()[0],
             ax.get_ylim()[1] * 1.2,
             "Posterior simulation of the difference",
-            **roboto_title,
+            **FONT_TITLE,
         )
 
         # Subtitle
@@ -200,7 +196,7 @@ class Bayesian(object):
             ax.get_xlim()[0],
             ax.get_ylim()[1] * 1.12,
             "Highlights the relative difference of the posterior" " distributions",
-            **roboto,
+            **FONT_DEFAULT,
         )
 
         # Set grid lines as grey and display behind the plot
